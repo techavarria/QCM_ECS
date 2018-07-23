@@ -1,11 +1,17 @@
+'''
+Codigo para el envio de mensajes al servidor en la comunicacion entre el pc y la rpi
+
+Autor: Tomas Echavarria - tomas.echavarria@eia.edu.co
+'''
+
 import paho.mqtt.client as mqttClient
 import time
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         print("Connected to broker: CMQTT_mensaje")
-        global Connected  # Use global variable
-        Connected = True  # Signal connection
+        global Connected
+        Connected = True
     else:
         print("Connection failed")
 
@@ -22,20 +28,17 @@ def envio(ArgT, ArgM):
     client.loop_start()  # start the loop
     # self.client.on_message = self.on_message
     client.on_connect = on_connect  # attach function to callback
-    # ----
+
     client.subscribe("#", 0)
 
     while Connected != True:
         time.sleep(.1)
-        # print(Connected)
     try:
         client.publish(ArgT, ArgM)
-        # print('envio')
-        # break
     except KeyboardInterrupt:
         client.disconnect()
         client.loop_stop()
         print('Error al enviar el mensaje')
-    # print('ciclo1')
+
     client.disconnect()
     client.loop_stop()

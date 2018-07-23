@@ -1,3 +1,9 @@
+'''
+Calculadora de numero en hexadecimal para programar los registros del generador de senales
+
+Autor: Tomas Echavarria - tomas.echavarria@eia.edu.co
+'''
+
 sysclk = 100*10**6
 def FTW_calc(frec):
     N = 48

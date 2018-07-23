@@ -1,3 +1,11 @@
+'''
+Codigo inicial para realizar las pruebas de las microbalanzas de quarzo
+
+Crea dos hilos para ejecutar codigos diferentes al mismo tiempo
+
+Autor: Tomas Echavarria - tomas.echavarria@eia.edu.co
+'''
+
 import time
 import threading
 import CMQTT_read_RPi

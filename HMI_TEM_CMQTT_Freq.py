@@ -3,9 +3,9 @@
 """
  ************************************************************************************************
  *
- *  SISTEMA DE IDENTIFICACIÓN Y CONTROL PLANTA DE TEMPERATURA
+ *  SISTEMA DE IDENTIFICACIÓN Y CONTROL PLANTA DE TEMPERATURA, CON SINCRONIZACION CON LA RPI Y CONTROL DEL GENERADOR DE SEÑALES
  *
- *  Uniersidad EIA Grupo de investigación GIBEC
+ *  Uniersidad EIA Grupo de Investigación GIBEC
  *
  *  E-mail: tomas.echavarria@eia.edu.co
  *

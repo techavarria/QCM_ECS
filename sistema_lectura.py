@@ -1,11 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+'''
+Comunicacion serial con modulo termoelectrico
+
+Autor: Tomas Echavarria - tomas.echavarria@eia.edu.co
+'''
+
 from threading import Thread
 import time
 import serial
 
 last_received = ''
 fin = 0
+
 def receiving(ser):
     global last_received
     global fin

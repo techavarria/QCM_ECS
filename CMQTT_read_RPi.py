@@ -1,3 +1,10 @@
+'''
+Lee constantemente los valores de amplitud y fase del servidor (CMQTT)
+enviados por la raspberry y los va guardando en un archivo csv.
+
+Autor: Tomas Echavarria - tomas.echavarria@eia.edu.co
+'''
+
 import paho.mqtt.client as mqttClient
 import time
 import csv

@@ -1,3 +1,9 @@
+'''
+Interfaz grafica para cuadrar la frecuencia o barrido de frecuencias de la tarjeta generadora de senales
+
+Autor: Tomas Echavarria - tomas.echavarria@eia.edu.co
+'''
+
 import serial
 import time
 import FTW_Freq_calc

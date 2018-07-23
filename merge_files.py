@@ -1,3 +1,10 @@
+'''
+Junta los datos de amplitud y frecuencia leidos del servidor
+con los datos de temperatura que se obtienen del modulo termoelectrico
+
+Autor: Tomas Echavarria - tomas.echavarria@eia.edu.co
+'''
+
 import numpy as np
 import csv
 from numpy import genfromtxt
