@@ -28,7 +28,7 @@ Codigos de rpi3:
 - 
 1. msg_read_v
 
-1.1. ads1256 (no está en repositorio)
+1.1. ads1256
 
 1.2. ser
 
