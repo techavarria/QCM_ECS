@@ -29,3 +29,9 @@ Codigos de rpi3:
 1. msg_read_v
 
 1.1. ads1256 (no está en repositorio)
+
+1.2. ser
+
+1.3. FTW_Freq_calc
+
+1.4. SetFrequency
