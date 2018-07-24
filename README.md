@@ -24,6 +24,10 @@ Codigos del pc:
 1.2.5. merge_files
 
 
+![alt text](https://github.com/techavarria/QCM_ECS/blob/master/diagrama_codigos.PNG)
+
+
+
 Codigos de rpi3:
 - 
 1. msg_read_v
@@ -35,3 +39,5 @@ Codigos de rpi3:
 1.3. FTW_Freq_calc
 
 1.4. SetFrequency
+
+
