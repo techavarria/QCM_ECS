@@ -41,3 +41,11 @@ Codigos de rpi3:
 1.4. SetFrequency
 
 
+
+------
+
+change rc.local
+wifi config
+
+
+
