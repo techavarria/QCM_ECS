@@ -28,7 +28,7 @@ Codigos del pc:
 
 
 
-Codigos de rpi3:
+Codigos de RPi3:
 - 
 1. msg_read_v
 
@@ -43,9 +43,12 @@ Codigos de rpi3:
 
 
 ------
+Configuracion de RPi3:
+-
+1. rc.local (/etc/ec.local) (direccion del programa que corre al inicio)
 
-change rc.local
-wifi config
+2. interfaces (/etc/network/interfaces)
 
+3. wpa_supplicant.conf (/etc/wpa_supplicant/wpa_supplicant.conf) (configuracion del wifi)
 
 
