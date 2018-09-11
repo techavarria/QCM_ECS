@@ -45,7 +45,7 @@ Codigos de RPi3:
 ------
 Configuracion de RPi3:
 -
-1. rc.local (/etc/ec.local) (direccion del programa que corre al inicio)
+1. rc.local (/etc/rc.local) (direccion del programa que corre al inicio)
 
 2. interfaces (/etc/network/interfaces)
 
