@@ -22,10 +22,8 @@ class Merge_it(object):
             my_data_temp = np.delete(y, 0, 0)
             if my_data_volts[3, -1] == 0:
                 self.diferencial = 1
-                print('es diferencial')
             else:
                 self.diferencial = 0
-                print('no es diferencial')
             TempArray = []
             for i in range(len(my_data_volts[:, 0])):
                 idx = self.find_nearest(my_data_temp[:, 0], my_data_volts[i, 0])
