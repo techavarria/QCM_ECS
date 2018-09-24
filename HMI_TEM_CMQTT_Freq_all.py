@@ -228,7 +228,7 @@ class Select_graph(wx.Frame):
         self.axes.set_axis_bgcolor('white')
         x_label = 'Tiempo (m)'
         pylab.setp(self.axes.set_xlabel(x_label), fontsize=10)
-        pylab.setp(self.axes.set_ylabel('Voltaje %'.decode('utf-8')), fontsize=10)
+        pylab.setp(self.axes.set_ylabel('Voltaje (V)'.decode('utf-8')), fontsize=10)
         pylab.setp(self.axes.get_xticklabels(), fontsize=8)
         pylab.setp(self.axes.get_yticklabels(), fontsize=8)
 
@@ -254,6 +254,8 @@ class Select_graph(wx.Frame):
         self.btn7 = wx.Button(self.panel, label='Volt-Bat', style=wx.ALIGN_LEFT, size=(100, 40))
         self.btn7.Bind(wx.EVT_BUTTON, self.btn_8)
 
+        self.l_step = SystemOutputBox(self.panel, "Voltaje: ", 0)
+
         GraficaSizer = wx.BoxSizer(wx.HORIZONTAL)
         BotonsSizer = wx.BoxSizer(wx.VERTICAL)
         BotonsSizer.Add(self.btn, 1, wx.ALL | wx.EXPAND, 5)
@@ -264,7 +266,7 @@ class Select_graph(wx.Frame):
         BotonsSizer.Add(self.btn5, 1, wx.ALL | wx.EXPAND, 5)
         BotonsSizer.Add(self.btn6, 1, wx.ALL | wx.EXPAND, 5)
         BotonsSizer.Add(self.btn7, 1, wx.ALL | wx.EXPAND, 5)
-
+        BotonsSizer.Add(self.l_step, 1, wx.ALL | wx.EXPAND, 5)
 
         GraficaSizer.Add(BotonsSizer, 0, wx.CENTER, 5)
         GraficaSizer.Add(self.canvas_1, 0, wx.CENTER, 5)
@@ -330,6 +332,7 @@ class Select_graph(wx.Frame):
             self.eje_y = self.pin5_rpi
             self.plot_variable.set_ydata(np.array(self.eje_y))
 
+        self.l_step.system_output.SetLabel(str(abs(self.eje_y[-1])))
 
         print('eje x\n\r' + str(self.eje_x))
         print('eje y\n\r' + str(self.eje_y))

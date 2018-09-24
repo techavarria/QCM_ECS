@@ -196,12 +196,10 @@ class Ventana(wx.Frame):
         else:
             frecuencia = int(self.inputTxtOne.GetValue())
             unicaobarrido = 1
-        # FTW_hex = FTW_Freq_calc.FTW_calc(frecu)
-        # self.ser.write(FTW_hex.decode("hex"))
-        # print(self.ser.read(self.ser.inWaiting()))
-        # global frecuencia
-        # frecuencia = 336
+
         self.Close()
+
+
     def SetSweep(self, event):
         # Para barrido
         global unicaobarrido, fi, fp, ff
@@ -214,15 +212,8 @@ class Ventana(wx.Frame):
             fp = int(self.inputTxtThree.GetValue())
             ff = int(self.inputTxtFour.GetValue())
             unicaobarrido = 2
-        # tiemp = time.time()
-        # for freq in range(fi, ff+fp, fp):  # (fi,ff,fp):
-        #     #  Para aumentar el tiempo disminuir los delays en el codigo en c (de la parte de escritura de registros de frecuencia)
-        #     self.ser.write('02'.decode("hex"))
-        #     FTW_hex = FTW_Freq_calc.FTW_calc(freq)
-        #     self.ser.write(FTW_hex.decode("hex"))
-        #     print(freq)
-        #     print(time.time()-tiemp)
         self.Close()
+
     def SetChirp(self, event):
         # Para chirp
         self.ser.write('03'.decode("hex"))

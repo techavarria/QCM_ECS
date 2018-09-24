@@ -20,7 +20,12 @@ class Merge_it(object):
             my_data_volts = np.delete(x, 0, 0)
             y = genfromtxt('C:\Users\\tomas.echavarria\Documents\Investigacion\HMI_modificado\Datos\CMQTT\Resp_Sistema_' + thedate + '.csv', delimiter=';')
             my_data_temp = np.delete(y, 0, 0)
-
+            if my_data_volts[3, -1] == 0:
+                self.diferencial = 1
+                print('es diferencial')
+            else:
+                self.diferencial = 0
+                print('no es diferencial')
             TempArray = []
             for i in range(len(my_data_volts[:, 0])):
                 idx = self.find_nearest(my_data_temp[:, 0], my_data_volts[i, 0])
@@ -35,18 +40,21 @@ class Merge_it(object):
         return idx
 
     def save_array(self, array, thedate):
-        # path = dlg.GetPath()
-        path = 'C:\Users\\tomas.echavarria\Documents\Investigacion\HMI_modificado\Datos\CMQTT\Merged_' + thedate + '.csv'
-        with open(path, 'w') as fp:
-            a = csv.writer(fp, delimiter=';')
-            # v_tie = array('f', (array[:,0]))
-            # v_a = array('f', (array[:,1]))
-            # v_f = array('f', (array[:,2]))
-            # v_tem = array('f', (array[:,3]))
-            a.writerows([['Tiempo', 'Dif(amp)', 'Dif(fase)', 'GND', 'Dif_2(fase)', 'Dif_2(amp)', 'Dif_1(fase)', 'Dif_1(amp)', 'Volt_Bat', 'Temperatura']])
-
-            for step in range(len(array[:,0])):
-                a.writerows([[array[step,0], array[step,1], array[step,2], array[step,3], array[step,4], array[step,5], array[step,6], array[step,7], array[step,8], array[step,9]]])
+        if self.diferencial == 0:
+            path = 'C:\Users\\tomas.echavarria\Documents\Investigacion\HMI_modificado\Datos\CMQTT\Merged_' + thedate + '.csv'
+            with open(path, 'w') as fp:
+                a = csv.writer(fp, delimiter=';')
+                a.writerows([['Tiempo', 'Dif(amp)x', 'Dif(fase)x', 'Dif(amp)y', 'Dif(fase)y', 'Dif(fase)', 'Dif(amp)', 'Dif(amp) calibrado', 'Dif(fase) calibrado', 'Temperatura']])
+                for step in range(len(array[:,0])):
+                    a.writerows([[array[step,0], array[step,1], array[step,2], array[step,3], array[step,4], array[step,5], array[step,6], array[step,7], array[step,8], array[step,9]]])
+        elif self.diferencial == 1:
+            path2 = 'C:\Users\\tomas.echavarria\Documents\Investigacion\HMI_modificado\Datos\CMQTT\Merged_' + thedate + '.csv'
+            with open(path2, 'w') as fp:
+                b = csv.writer(fp, delimiter=';')
+                b.writerows([['Tiempo', 'pin1', 'pin2', 'pin3', 'pin4', 'Temperatura']])
+                for step in range(len(array[:, 0])):
+                    b.writerows(
+                        [[array[step, 0], array[step, 1], array[step, 2], array[step, 3], array[step, 4], array[step, 9]]])
 
 if __name__=='__main__':
     Merge_it('delete')
