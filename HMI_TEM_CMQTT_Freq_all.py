@@ -61,7 +61,7 @@ import merge_files_all
 TIEMPO_REFRESCAR_MS = 50
 TASA_MUESTREO_MS = 50                           # no se usa
 RANGO_AUTOMATICO_X = 20000/TASA_MUESTREO_MS     # no se usa
-RANGO_AUTOMATICO_Y = 100
+RANGO_AUTOMATICO_Y = 40
 RANGO_AUTOMATICO_Y_RPI = 5
 
 tabla = [0, 0]
@@ -190,11 +190,14 @@ class SystemInputBox(wx.Panel):
 
 class SystemOutputBox(wx.Panel):
 
-    def __init__(self,parent,label,val):
+    def __init__(self,parent,label,val,tam=12):
         wx.Panel.__init__(self,parent)
+        font = wx.Font(tam, wx.SWISS, wx.NORMAL, wx.NORMAL)
         box_1 = wx.StaticBox(self,0,label)
+        box_1.SetFont(font)
         sizer_1 = wx.StaticBoxSizer(box_1, wx.HORIZONTAL)
         self.system_output = wx.StaticText(self,size=(50,30),label= str(val),style=wx.TE_PROCESS_ENTER|wx.TE_CENTRE)
+        self.system_output.SetFont(font)
         sizer_1.Add(self.system_output, 5, wx.ALL, 10)
         self.SetSizer(sizer_1)
         sizer_1.Fit(self)
@@ -218,7 +221,7 @@ class Select_graph(wx.Frame):
 
     def panel_principal(self):
         titulo_2 = wx.StaticText(self.panel, wx.ID_ANY, u'Pines de salida circuito QCMs')
-        font = wx.Font(10, wx.SWISS, wx.NORMAL, wx.NORMAL)
+        font = wx.Font(12, wx.SWISS, wx.NORMAL, wx.NORMAL)
         titulo_2.SetFont(font)
 
         self.dpi = 100
@@ -237,42 +240,62 @@ class Select_graph(wx.Frame):
 
         self.canvas_1 = FigCanvas1(self.panel, wx.ID_ANY, self.figura_1)
 
-        self.btn = wx.Button(self.panel, label='Dif(Amp)', style=wx.ALIGN_LEFT, size=(100, 40))
+        self.btn = wx.Button(self.panel, label='Dif(amp)x', style=wx.ALIGN_LEFT, size=(100, 40))
         self.btn.Bind(wx.EVT_BUTTON, self.btn_1)
-        self.btn1 = wx.Button(self.panel, label='Dif(Fase)', style=wx.ALIGN_LEFT, size=(100, 40))
+        self.btn1 = wx.Button(self.panel, label='Dif(fase)x', style=wx.ALIGN_LEFT, size=(100, 40))
         self.btn1.Bind(wx.EVT_BUTTON, self.btn_2)
-        self.btn2 = wx.Button(self.panel, label='GND', style=wx.ALIGN_LEFT, size=(100, 40))
+        self.btn2 = wx.Button(self.panel, label='Dif(amp)y', style=wx.ALIGN_LEFT, size=(100, 40))
         self.btn2.Bind(wx.EVT_BUTTON, self.btn_3)
-        self.btn3 = wx.Button(self.panel, label='Dif(Fase)_1', style=wx.ALIGN_LEFT, size=(100, 40))
+        self.btn3 = wx.Button(self.panel, label='Dif(fase)y', style=wx.ALIGN_LEFT, size=(100, 40))
         self.btn3.Bind(wx.EVT_BUTTON, self.btn_4)
-        self.btn4 = wx.Button(self.panel, label='Dif(Amp)_1', style=wx.ALIGN_LEFT, size=(100, 40))
+        self.btn4 = wx.Button(self.panel, label='Dif(fase)', style=wx.ALIGN_LEFT, size=(100, 40))
         self.btn4.Bind(wx.EVT_BUTTON, self.btn_5)
-        self.btn5 = wx.Button(self.panel, label='Dif(Fase)_2', style=wx.ALIGN_LEFT, size=(100, 40))
+        self.btn5 = wx.Button(self.panel, label='Dif(amp)', style=wx.ALIGN_LEFT, size=(100, 40))
         self.btn5.Bind(wx.EVT_BUTTON, self.btn_6)
-        self.btn6 = wx.Button(self.panel, label='Dif(Amp)_2', style=wx.ALIGN_LEFT, size=(100, 40))
+        self.btn6 = wx.Button(self.panel, label='Dif(amp) calibrado', style=wx.ALIGN_LEFT, size=(100, 40))
         self.btn6.Bind(wx.EVT_BUTTON, self.btn_7)
-        self.btn7 = wx.Button(self.panel, label='Volt-Bat', style=wx.ALIGN_LEFT, size=(100, 40))
+        self.btn7 = wx.Button(self.panel, label='Dif(fase) calibrado', style=wx.ALIGN_LEFT, size=(120, 40))
         self.btn7.Bind(wx.EVT_BUTTON, self.btn_8)
 
-        self.l_step = SystemOutputBox(self.panel, "Voltaje: ", 0)
+        self.l_step = SystemOutputBox(self.panel, "Voltaje: ", 0, 12)
 
+        PrincSizer = wx.BoxSizer(wx.VERTICAL)
         GraficaSizer = wx.BoxSizer(wx.HORIZONTAL)
         BotonsSizer = wx.BoxSizer(wx.VERTICAL)
+        EjesSizer = wx.BoxSizer(wx.VERTICAL)
+
+        text_pines = wx.StaticText(self.panel, wx.ID_ANY, 'Seleccione el pin:')
+        text_pines.SetFont(font)
+        BotonsSizer.Add(text_pines, 1, wx.ALL | wx.EXPAND, 5)
         BotonsSizer.Add(self.btn, 1, wx.ALL | wx.EXPAND, 5)
         BotonsSizer.Add(self.btn1, 1, wx.ALL | wx.EXPAND, 5)
         BotonsSizer.Add(self.btn2, 1, wx.ALL | wx.EXPAND, 5)
         BotonsSizer.Add(self.btn3, 1, wx.ALL | wx.EXPAND, 5)
-        BotonsSizer.Add(self.btn4, 1, wx.ALL | wx.EXPAND, 5)
         BotonsSizer.Add(self.btn5, 1, wx.ALL | wx.EXPAND, 5)
+        BotonsSizer.Add(self.btn4, 1, wx.ALL | wx.EXPAND, 5)
         BotonsSizer.Add(self.btn6, 1, wx.ALL | wx.EXPAND, 5)
         BotonsSizer.Add(self.btn7, 1, wx.ALL | wx.EXPAND, 5)
-        BotonsSizer.Add(self.l_step, 1, wx.ALL | wx.EXPAND, 5)
 
+
+        GraficaSizer.AddSpacer(20)
         GraficaSizer.Add(BotonsSizer, 0, wx.CENTER, 5)
-        GraficaSizer.Add(self.canvas_1, 0, wx.CENTER, 5)
-        self.panel.SetSizer(GraficaSizer)
-        GraficaSizer.Fit(self.panel)
 
+        self.texto = wx.StaticText(self.panel, wx.ID_ANY, u'Dif(amp)x')
+        self.fuente = wx.Font(14, wx.SWISS, wx.NORMAL, wx.NORMAL)
+        self.texto.SetFont(self.fuente)
+
+        EjesSizer.Add(self.texto, 0, wx.CENTER, 5)
+        EjesSizer.AddSpacer(10)
+        EjesSizer.Add(self.canvas_1, 0, wx.CENTER, 5)
+        EjesSizer.AddSpacer(30)
+        EjesSizer.Add(self.l_step, 0, wx.CENTER, 5)
+
+        GraficaSizer.Add(EjesSizer, 0, wx.CENTER, 5)
+        titu = wx.StaticText(self.panel, wx.ID_ANY, u'Pines de salida circuito QCMs')
+        titu.SetFont(font)
+        PrincSizer.Add(GraficaSizer, 1, wx.ALL | wx.EXPAND, 5)
+        self.panel.SetSizer(PrincSizer)
+        PrincSizer.Fit(self.panel)
 
     def on_tiempo_refresco(self, event):
         global stop_refresco, tiempo_rpi, amplitud_rpi, fase_rpi, bat_rpi, pin1_rpi, pin2_rpi, pin3_rpi, pin4_rpi, pin5_rpi
@@ -334,8 +357,8 @@ class Select_graph(wx.Frame):
 
         self.l_step.system_output.SetLabel(str(abs(self.eje_y[-1])))
 
-        print('eje x\n\r' + str(self.eje_x))
-        print('eje y\n\r' + str(self.eje_y))
+        # print('eje x\n\r' + str(self.eje_x))
+        # print('eje y\n\r' + str(self.eje_y))
 
         # self.plot_variable.set_ydata(self.eje_x)    #borrar
 
@@ -343,27 +366,35 @@ class Select_graph(wx.Frame):
 
     def btn_1(self, e):
         self.num_pin = 0
+        self.texto.SetLabel('Dif(amp)x')
 
     def btn_2(self, e):
         self.num_pin = 1
+        self.texto.SetLabel('Dif(fase)x')
 
     def btn_3(self, e):
         self.num_pin = 2
+        self.texto.SetLabel('Dif(amp)y')
 
     def btn_4(self, e):
         self.num_pin = 3
+        self.texto.SetLabel('Dif(fase)y')
 
     def btn_5(self, e):
         self.num_pin = 4
+        self.texto.SetLabel('Dif(fase)')
 
     def btn_6(self, e):
         self.num_pin = 5
+        self.texto.SetLabel('Dif(amp)')
 
     def btn_7(self, e):
         self.num_pin = 6
+        self.texto.SetLabel('Dif(amp) calibrado')
 
     def btn_8(self, e):
         self.num_pin = 7
+        self.texto.SetLabel('Dif(fase) calibrado')
 
 class PPLForm(wx.Frame):
     def __init__(self):
@@ -519,7 +550,7 @@ class PPLForm(wx.Frame):
         btn3 = wx.Button(self.panel, label='-',style=wx.ALIGN_LEFT,size = (100, 40))
 
 
-        btn4 = wx.Button(self.panel, label='Ventana',style=wx.ALIGN_LEFT,size = (40, 40))
+        btn4 = wx.Button(self.panel, label='C/U',style=wx.ALIGN_LEFT,size=(40,70))
         btn4.Bind(wx.EVT_BUTTON, self.cambiar_ventana)
 
         btn2.Hide()
@@ -535,17 +566,17 @@ class PPLForm(wx.Frame):
         self.o_grid          = wx.CheckBox(self.panel, wx.ID_ANY, u"Ocultar Cuadrícula",style=wx.ALIGN_LEFT)
         self.o_setp          = wx.CheckBox(self.panel, wx.ID_ANY, u"Ocultar Set Point",style=wx.ALIGN_LEFT)
         self.o_rsis          = wx.CheckBox(self.panel, wx.ID_ANY, u"Ocultar R.Sistema",style=wx.ALIGN_LEFT)
-        self.o_sctr          = wx.CheckBox(self.panel, wx.ID_ANY, u"Ocultar S.Control",style=wx.ALIGN_LEFT)
-        self.o_err           = wx.CheckBox(self.panel, wx.ID_ANY, u"Ocultar Error",style=wx.ALIGN_LEFT)
-        self.o_ref           = wx.CheckBox(self.panel, wx.ID_ANY, u"Ocultar Refer", style=wx.ALIGN_LEFT)
+        self.o_sctr          = wx.CheckBox(self.panel, wx.ID_ANY, u"Ocultar Error",style=wx.ALIGN_LEFT)
+        self.o_err           = wx.CheckBox(self.panel, wx.ID_ANY, u"Ocultar Amp",style=wx.ALIGN_LEFT)
+        self.o_ref           = wx.CheckBox(self.panel, wx.ID_ANY, u"Ocultar Fase", style=wx.ALIGN_LEFT)
 
-        self.l_step       = SystemOutputBox(self.panel, "Set Point ", 0)
-        self.l_sysresp    = SystemOutputBox(self.panel, "R.Sistema", 0)
-        self.l_actuador   = SystemOutputBox(self.panel, "S.Control", 0)
-        self.l_errors     = SystemOutputBox(self.panel, "Error ", 0)
-        self.l_sysref     = SystemOutputBox(self.panel, "Referencia ", 0)
+        self.l_step       = SystemOutputBox(self.panel, "Set Point ", 0, 10)
+        self.l_sysresp    = SystemOutputBox(self.panel, "R.Sistema", 0, 10)
+        self.l_actuador   = SystemOutputBox(self.panel, "Error", 0, 10)
+        self.l_errors     = SystemOutputBox(self.panel, "Amplitud", 0, 10)
+        self.l_sysref     = SystemOutputBox(self.panel, "Fase", 0, 10)
 
-        #---------------------EVENTOS DE COMPONENTES---------------------------
+        #---------------------EVENTOS DE COMPONENTES------------------------   ---
         self.Bind(wx.EVT_BUTTON,self.conectar,self.boton_conectar)
         self.Bind(wx.EVT_UPDATE_UI, self.act_estado_conectar, self.boton_conectar)
 
@@ -717,9 +748,11 @@ class PPLForm(wx.Frame):
         pylab.setp(self.axes1.get_xticklabels(), fontsize=8)
         pylab.setp(self.axes1.get_yticklabels(), fontsize=8)
 
-        self.plot_a_rpi = self.axes1.plot(self.step, linewidth=1, color=(0, 0, 0), label='Amplitud')[0]
+        self.plot_a_rpi = self.axes1.plot(self.step, linewidth=1, color=(0, 0, 0), label='Amplitud (x)')[0]
+        self.plot_voltbat = self.axes1.plot(self.step, linewidth=1, color=(0, 1, 0), label='Amplitud (y)')[0]
 
-        self.axes1.legend(bbox_to_anchor=(1.0, 0.2), loc=1, frameon=False, labelspacing=0.3, prop={'size': 7})
+
+        self.axes1.legend(bbox_to_anchor=(1.0, 0.25), loc=1, frameon=False, labelspacing=0.3, prop={'size': 7})
 
     def graf_axes3(self):
         x_label = 'Tiempo (m)'
@@ -728,22 +761,22 @@ class PPLForm(wx.Frame):
         pylab.setp(self.axes2.get_xticklabels(), fontsize=8)
         pylab.setp(self.axes2.get_yticklabels(), fontsize=8)
 
-        self.plot_f_rpi = self.axes2.plot(self.step, linewidth=1, color=(1, 0, 0), label='Fase')[0]
+        self.plot_f_rpi = self.axes2.plot(self.step, linewidth=1, color=(1, 0, 0), label='Fase (x)')[0]
+        self.plot_pin1 = self.axes2.plot(self.step, linewidth=1, color=(0, 0, 0), label='Fase (y)')[0]
 
-        self.axes2.legend(bbox_to_anchor=(1.0, 0.2), loc=1, frameon=False, labelspacing=0.3, prop={'size': 7})
+        self.axes2.legend(bbox_to_anchor=(1.0, 0.25), loc=1, frameon=False, labelspacing=0.3, prop={'size': 7})
 
     def graf_axes4(self):
         x_label = 'Tiempo (m)'
         pylab.setp(self.axes3.set_xlabel(x_label), fontsize=10)
-        pylab.setp(self.axes3.set_ylabel('Temp,Amp,Fase,VoltBat %'.decode('utf-8')), fontsize=10)
+        pylab.setp(self.axes3.set_ylabel('Temp vs Amp y Fase %'.decode('utf-8')), fontsize=10)
         pylab.setp(self.axes3.get_xticklabels(), fontsize=8)
         pylab.setp(self.axes3.get_yticklabels(), fontsize=8)
 
-        self.plot_sysresp1 = self.axes3.plot(self.step, linewidth=1, color=(1, 0, 0), label='R.Sistema')[0]
-        self.plot_voltbat = self.axes3.plot(self.step, linewidth=1, color=(0, 1, 0), label='Volt.Bateria')[0]
+        self.plot_sysresp1 = self.axes3.plot(self.step, linewidth=1, color=(1, 0, 0), label='R.Sistema (T)')[0]
 
-        self.plot_a_rpi1 = self.axes3.plot(self.step, linewidth=1, color=(1, 0, 1), label='Amplitud')[0]
-        self.plot_f_rpi1 = self.axes3.plot(self.step, linewidth=1, color=(1, 1, 0), label='Fase')[0]
+        self.plot_diff_a = self.axes3.plot(self.step, linewidth=1, color=(1, 0, 1), label='Amplitud')[0]
+        self.plot_diff_f = self.axes3.plot(self.step, linewidth=1, color=(1, 1, 0), label='Fase')[0]
 
         self.axes3.legend(bbox_to_anchor=(1.0, 0.35), loc=1, frameon=False, labelspacing=0.3, prop={'size': 7})
 
@@ -791,7 +824,7 @@ class PPLForm(wx.Frame):
             self.graf_axes3()
             self.graf_axes4()
 
-            self.fig_1.subplots_adjust(left=0.09, right=0.85, top=0.96, bottom=0.1)
+            self.fig_1.subplots_adjust(left=0.09, right=0.85, top=0.99, bottom=0.09)
             self.yaClickeo = 0
 
     def crear_barra_estado(self):
@@ -880,15 +913,18 @@ class PPLForm(wx.Frame):
         ## VECTOR TIEMPO
         self.plot_a_rpi.set_xdata(self.tiempo_rpi)
         self.plot_f_rpi.set_xdata(self.tiempo_rpi)
-        self.plot_a_rpi1.set_xdata(self.tiempo_rpi)
-        self.plot_f_rpi1.set_xdata(self.tiempo_rpi)
+        self.plot_diff_a.set_xdata(self.tiempo_rpi)
+        self.plot_diff_f.set_xdata(self.tiempo_rpi)
         self.plot_voltbat.set_xdata(self.tiempo_rpi)
+        self.plot_pin1.set_xdata(self.tiempo_rpi)
 
         self.plot_a_rpi.set_ydata(np.array(self.amplitud_rpi))
         self.plot_f_rpi.set_ydata(np.array(self.fase_rpi))
-        self.plot_a_rpi1.set_ydata(np.array(self.amplitud_rpi))
-        self.plot_f_rpi1.set_ydata(np.array(self.fase_rpi))
+        self.plot_diff_a.set_ydata(np.array(self.pin3_rpi))
+        self.plot_diff_f.set_ydata(np.array(self.pin2_rpi))
         self.plot_voltbat.set_ydata(np.array(self.bat_rpi))
+        self.plot_pin1.set_ydata(np.array(self.pin1_rpi))
+
 
         try:
             self.canvas_1.draw()
@@ -909,9 +945,9 @@ class PPLForm(wx.Frame):
 
         self.l_step.system_output.SetLabel(str(abs(self.step[-1])))
         self.l_sysresp.system_output.SetLabel(str(self.sysresp[-1]))
-        self.l_actuador.system_output.SetLabel(str(self.actuador[-1]))
-        self.l_errors.system_output.SetLabel(str(self.errors[-1]))
-        self.l_sysref.system_output.SetLabel(str(self.sysref[-1]))
+        self.l_actuador.system_output.SetLabel(str(self.errors[-1]))
+        self.l_errors.system_output.SetLabel(str(self.pin3_rpi[-1]))
+        self.l_sysref.system_output.SetLabel(str(self.pin2_rpi[-1]))
 
     def conectar(self,event):
         if (Freq_GUI.frecuencia == 0) and (Freq_GUI.fi == 0) and (Freq_GUI.fp == 0) and (Freq_GUI.ff == 0):
@@ -1076,9 +1112,10 @@ class PPLForm(wx.Frame):
             self.plot_sysresp1.set_xdata([0])
             self.plot_voltbat.set_xdata([0])
             self.plot_a_rpi.set_xdata([0])
-            self.plot_a_rpi1.set_xdata([0])
+            self.plot_diff_a.set_xdata([0])
             self.plot_f_rpi.set_xdata([0])
-            self.plot_f_rpi1.set_xdata([0])
+            self.plot_diff_f.set_xdata([0])
+            self.plot_pin1.set_xdata([0])
 
             self.pint_graf()
 
@@ -1205,19 +1242,22 @@ class PPLForm(wx.Frame):
             self.pint_graf()
 
         if (self.bandera == 1):
-            print(tim.time()-self.contador_tiempo)
+            # print(tim.time()-self.contador_tiempo)
             self.num_pasos = int(tabla.shape[0])
-
-            if (tim.time() - self.contador_tiempo > self.duracion[self.ind_pasos]):
-                self.ind_pasos += 1
-                if self.ind_pasos == self.num_pasos:
-                    self.otravar = 1
-                else:
-                    self.datagen.next('$R16=1\r')
-                    self.datagen.next('$R23=1\r')
-                    self.datagen.next('$R13=5\r')
-                    self.datagen.next('$R0=' + str(tabla[self.ind_pasos, 1]) + '\r')
-                    self.datagen.next('$W\r')
+            if (len(self.errors) > 51):
+                if ((self.errors[-1]-self.errors[-50]) < 0.035) and (self.errors[-1] < 1.8):
+                # if (tim.time() - self.contador_tiempo > self.duracion[self.ind_pasos]):
+                    self.ind_pasos += 1
+                    print('plot_fase')
+                    print(self.tiempo_rpi)
+                    if self.ind_pasos == self.num_pasos:
+                        self.otravar = 1
+                    else:
+                        self.datagen.next('$R16=1\r')
+                        self.datagen.next('$R23=1\r')
+                        self.datagen.next('$R13=5\r')
+                        self.datagen.next('$R0=' + str(tabla[self.ind_pasos, 1]) + '\r')
+                        self.datagen.next('$W\r')
 
         if (self.otravar == 1) and (self.var_fin == 0):
 
@@ -1283,25 +1323,27 @@ class PPLForm(wx.Frame):
                     if (val_min == len(self.tiempo_step)+1):
                         self.tiempo_step.append((tim.time() - self.eje_tiempo) / 60)
 
-                    self.tiempo_rpi.append(tiempo_rp / 60)
-                    self.amplitud_rpi.append(amplitud_rp)
-                    self.fase_rpi.append(fase_rp)
-                    self.bat_rpi.append(bat_rp)
-                    self.pin1_rpi.append(pin1_rp)
-                    self.pin2_rpi.append(pin2_rp)
-                    self.pin3_rpi.append(pin3_rp)
-                    self.pin4_rpi.append(pin4_rp)
-                    self.pin5_rpi.append(pin5_rp)
+                    if ((tiempo_rp / 60) > self.tiempo_rpi[-1]):
 
-                    tiempo_rpi.append(tiempo_rp / 60)
-                    amplitud_rpi.append(amplitud_rp)
-                    fase_rpi.append(fase_rp)
-                    bat_rpi.append(bat_rp)
-                    pin1_rpi.append(pin1_rp)
-                    pin2_rpi.append(pin2_rp)
-                    pin3_rpi.append(pin3_rp)
-                    pin4_rpi.append(pin4_rp)
-                    pin5_rpi.append(pin5_rp)
+                        self.tiempo_rpi.append(tiempo_rp / 60)
+                        self.amplitud_rpi.append(amplitud_rp)
+                        self.fase_rpi.append(fase_rp)
+                        self.bat_rpi.append(bat_rp)
+                        self.pin1_rpi.append(pin1_rp)
+                        self.pin2_rpi.append(pin2_rp)
+                        self.pin3_rpi.append(pin3_rp)
+                        self.pin4_rpi.append(pin4_rp)
+                        self.pin5_rpi.append(pin5_rp)
+
+                        tiempo_rpi.append(tiempo_rp / 60)
+                        amplitud_rpi.append(amplitud_rp)
+                        fase_rpi.append(fase_rp)
+                        bat_rpi.append(bat_rp)
+                        pin1_rpi.append(pin1_rp)
+                        pin2_rpi.append(pin2_rp)
+                        pin3_rpi.append(pin3_rp)
+                        pin4_rpi.append(pin4_rp)
+                        pin5_rpi.append(pin5_rp)
 
             except:
                 print('hubo error de comunicación, se ignoró el dato')

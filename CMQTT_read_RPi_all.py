@@ -76,7 +76,7 @@ class General(object):
             self.thefecha = msg.payload
         if msg.topic == "valor":
             if self.vari == 1:
-                print(msg.topic + " " + str(msg.payload))
+                # print(msg.topic + " " + str(msg.payload))
                 self.v_tiempo.append(float(msg.payload.decode('UTF-8').split(",")[0]))
                 self.v_amp.append(float(msg.payload.decode('UTF-8').split(",")[1]))
                 self.v_fase.append(float(msg.payload.decode('UTF-8').split(",")[2]))
