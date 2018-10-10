@@ -452,6 +452,7 @@ class PPLForm(wx.Frame):
         self.var_inicio = 0
         self.fecha_save = ''
         self.yaClickeo = 0
+        self.modo_perfiles = 0
         #-------------------------METODOS--------------------------------------
         self.crear_menu_superior()
         self.grafo_1(0)
@@ -562,6 +563,18 @@ class PPLForm(wx.Frame):
         self.btn_frecuencia = wx.Button(self.panel, label="FRECUENCIA", style=wx.ALIGN_LEFT, size=(100,70))
         self.btn_frecuencia.Bind(wx.EVT_BUTTON, self.frecuencia)
 
+
+        # Opcion de perfiles por tiempo o por error relativo
+
+        self.btn_Tiem = wx.Button(self.panel, label="Tiempo", style=wx.ALIGN_LEFT, size=(50, 5))
+        self.btn_Tiem.Bind(wx.EVT_BUTTON, self.modo_tiempo)  #cambiar la funcion
+
+        self.btn_Err = wx.Button(self.panel, label="Error", style=wx.ALIGN_LEFT, size=(50, 30))
+        self.btn_Err.Bind(wx.EVT_BUTTON, self.modo_error)  # cambiar la funcion
+
+
+
+
         #--------------------------------------------
         self.o_grid          = wx.CheckBox(self.panel, wx.ID_ANY, u"Ocultar Cuadrícula",style=wx.ALIGN_LEFT)
         self.o_setp          = wx.CheckBox(self.panel, wx.ID_ANY, u"Ocultar Set Point",style=wx.ALIGN_LEFT)
@@ -597,46 +610,103 @@ class PPLForm(wx.Frame):
         PPSizer      = wx.BoxSizer(wx.VERTICAL)
         TituloSizer  = wx.BoxSizer(wx.HORIZONTAL)
         GraficaSizer = wx.BoxSizer(wx.HORIZONTAL)
+
         Input_Sizer  = wx.BoxSizer(wx.VERTICAL)
-
-        botones_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        botones_sizer.Add(btn, 1, wx.ALL | wx.EXPAND, 5)
-        botones_sizer.Add(btn3, 1, wx.ALL | wx.EXPAND, 5)
-
+        self.botones_sizer = wx.BoxSizer(wx.HORIZONTAL)
         inicio_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        ControlSizer = wx.BoxSizer(wx.HORIZONTAL)
+        CheckSizer = wx.BoxSizer(wx.VERTICAL)
+        CheckSizer_2 = wx.BoxSizer(wx.VERTICAL)
+        op_error = wx.BoxSizer(wx.VERTICAL)
+        self.botones_sizer2 = wx.BoxSizer(wx.HORIZONTAL)
+        # ModoSizer = wx.BoxSizer(wx.HORIZONTAL)
+# ---------------------
+        self.textarea = wx.TextCtrl(self, -1, style=wx.TE_MULTILINE | wx.TE_READONLY, size=(200, 190))
+        self.Bind(wx.EVT_LEFT_DOWN, self.clearTxtBox, self.textarea)
+        titu = wx.StaticText(self.panel, wx.ID_ANY, u'Seleccione el modo')
+        titu.SetFont(font)
+        self.titu = titu
+        self.val_error = wx.TextCtrl(self.panel, -1, size=(100, 10))
+        titul = wx.StaticText(self.panel, wx.ID_ANY, u'Error')
+        titul.SetFont(font)
+        self.titul = titul
+        self.lali = wx.StaticLine(self.panel, wx.ID_ANY, wx.Point(1, 0), wx.Size(1, 70), wx.VERTICAL)
+
+
+        button_clear = wx.Button(self.panel, label='Borrar', size=(20, 20))
+        button_clear.Bind(wx.EVT_BUTTON, self.clearTxtBox)
+
+# ---------------------
+
+        self.botones_sizer.Add(btn, 1, wx.ALL | wx.EXPAND, 5)
+        self.botones_sizer.Add(btn3, 1, wx.ALL | wx.EXPAND, 5)
+
         inicio_sizer.Add(self.boton_iniciar, 1, wx.ALL | wx.EXPAND, 5)
         inicio_sizer.Add(self.boton_parar, 1, wx.ALL | wx.EXPAND, 5)
 
-        self.textarea = wx.TextCtrl(self, -1,style= wx.TE_MULTILINE | wx.TE_READONLY, size=(200, 190))
-        self.Bind(wx.EVT_LEFT_DOWN, self.clearTxtBox, self.textarea)
-
-        ControlSizer = wx.BoxSizer(wx.HORIZONTAL)
-
-        CheckSizer   = wx.BoxSizer(wx.VERTICAL)
-        CheckSizer_2 = wx.BoxSizer(wx.VERTICAL)
-
         TituloSizer.Add(titulo_2, 0, wx.ALL, 5)
 
-        Input_Sizer.Add(titulo_3,  0, wx.CENTER,5)
-        Input_Sizer.Add(wx.StaticLine(self.panel,), 0, wx.ALL|wx.EXPAND, 10)
+        op_error.Add(titul, 1, wx.ALL | wx.EXPAND, 5)
+        op_error.Add(self.val_error, 1, wx.ALL | wx.EXPAND, 5)
+        op_error.Add(self.btn_Err, 1, wx.ALL | wx.EXPAND, 5)
+
+        self.botones_sizer2.Add(self.btn_Tiem, 1, wx.ALL | wx.EXPAND, 5)
+        self.botones_sizer2.Add(self.lali, 0, wx.ALL | wx.EXPAND, 5)
+        self.botones_sizer2.Add(op_error, 1, wx.ALL | wx.EXPAND, 5)
+
+        # ModoSizer.Add(self.list_ctrl, 0, wx.ALL | wx.EXPAND, 5)
+        # ModoSizer.Add(self.botones_sizer, 0, wx.CENTER, 5)
+
+        Input_Sizer.Add(titulo_3, 0, wx.CENTER, 5)
+        Input_Sizer.Add(wx.StaticLine(self.panel, ), 0, wx.ALL | wx.EXPAND, 10)
         Input_Sizer.Add(self.list_ctrl, 0, wx.ALL | wx.EXPAND, 5)
-        # Input_Sizer.AddSpacer(10)
-        Input_Sizer.Add(botones_sizer, 0, wx.CENTER, 5)
+        Input_Sizer.Add(titu, 0, wx.CENTER, 5)
+        Input_Sizer.Add(self.botones_sizer2, 0, wx.CENTER, 5)
+        Input_Sizer.Add(self.botones_sizer, 0, wx.CENTER, 5)
         Input_Sizer.Add(self.t_label,  0, wx.CENTER, 5)
         Input_Sizer.Add(self.t_temp,   0, wx.CENTER, 5)
         Input_Sizer.Add(self.t_value,  0, wx.CENTER, 5)
         Input_Sizer.Add(self.t_grad,   0, wx.CENTER, 5)
-        # Input_Sizer.AddSpacer(10)
         Input_Sizer.Add(self.t_anadir, 0, wx.CENTER, 5)
         Input_Sizer.Add(wx.StaticLine(self.panel,), 0, wx.ALL|wx.EXPAND, 10)
         Input_Sizer.Add(inicio_sizer, 0, wx.CENTER, 5)
-        # Input_Sizer.AddSpacer(4)
         Input_Sizer.Add(self.textarea, 0, wx.CENTER|wx.EXPAND, 5)
-        button_clear = wx.Button(self.panel, label='Borrar',size = (20, 20))
-        button_clear.Bind(wx.EVT_BUTTON, self.clearTxtBox)
         Input_Sizer.Add(button_clear, 0, wx.ALL|wx.EXPAND, 10)
-        # GraficaSizer.AddSpacer(10)
+
+        # Input_Sizer2.Add(titulo_3, 0, wx.CENTER, 5)
+        # Input_Sizer2.Add(wx.StaticLine(self.panel, ), 0, wx.ALL | wx.EXPAND, 10)
+        # # Input_Sizer2.Add(self.list_ctrl, 0, wx.ALL | wx.EXPAND, 5)
+        # Input_Sizer2.Add(titu, 0, wx.CENTER, 5)
+        # Input_Sizer2.Add(self.botones_sizer2, 0, wx.CENTER, 5)
+        # # Input_Sizer2.Add(self.botones_sizer, 0, wx.CENTER, 5)
+        # Input_Sizer2.Add(self.t_label, 0, wx.CENTER, 5)
+        # Input_Sizer2.Add(self.t_temp, 0, wx.CENTER, 5)
+        # Input_Sizer2.Add(self.t_value, 0, wx.CENTER, 5)
+        # Input_Sizer2.Add(self.t_grad, 0, wx.CENTER, 5)
+        # Input_Sizer2.Add(self.t_anadir, 0, wx.CENTER, 5)
+        # Input_Sizer2.Add(wx.StaticLine(self.panel, ), 0, wx.ALL | wx.EXPAND, 10)
+        # Input_Sizer2.Add(inicio_sizer, 0, wx.CENTER, 5)
+        # Input_Sizer2.Add(self.textarea, 0, wx.CENTER | wx.EXPAND, 5)
+        # Input_Sizer2.Add(button_clear, 0, wx.ALL | wx.EXPAND, 10)
+
+
+        # self.list_ctrl.Hide()
+        # btn.Hide()
+        # self.btn = btn
+        # self.btn3 = btn3
+        # btn3.Hide()
+
+
+        # ------------- CONDICIONES ----------------------------
+
+        self.list_ctrl.Hide()
+        self.botones_sizer.Hide(self)
+        self.botones_sizer.ShowItems(show=False)
+
+
+        self.inputSizer = Input_Sizer
         GraficaSizer.Add(Input_Sizer)
+        # GraficaSizer.Add(Input_Sizer2)
         GraficaSizer.Add(self.ln, 0, wx.ALL, 5)
         GraficaSizer.Add(self.canvas_1, 0, wx.CENTER, 5)
 
@@ -664,12 +734,13 @@ class PPLForm(wx.Frame):
 
         PPSizer.Add(TituloSizer, 0, wx.CENTER)
         PPSizer.Add(wx.StaticLine(self.panel, ), 0, wx.ALL|wx.EXPAND, 10)
-        PPSizer.Add(GraficaSizer,0, wx.ALL|wx.CENTER, 5)
+        PPSizer.Add(GraficaSizer, 0, wx.ALL|wx.CENTER, 5)
         PPSizer.Add(wx.StaticLine(self.panel, ), 0, wx.ALL|wx.EXPAND, 10)
         PPSizer.Add(ControlSizer, 0, wx.ALL|wx.ALIGN_LEFT, 5)
 
         self.panel.SetSizer(PPSizer)
         PPSizer.Fit(self.panel)
+        self.PPSizer = PPSizer
 
     def clearTxtBox(self, event):
         self.textarea.Clear()
@@ -703,6 +774,38 @@ class PPLForm(wx.Frame):
 
     def frecuencia(self, e):
         Freq_GUI.Inicio()
+
+    def modo_tiempo(self, e):
+        self.modo_perfiles = 1
+        self.titu.Hide()
+        self.botones_sizer2.Hide(self)
+        self.botones_sizer2.ShowItems(show=False)
+
+        self.list_ctrl.Show()
+        self.botones_sizer.Show(self)
+        self.botones_sizer.ShowItems(show=True)
+
+        self.panel.SetSizer(self.PPSizer)
+        self.PPSizer.Fit(self.panel)
+
+    def modo_error(self, e):
+
+        self.elerror = self.val_error.GetValue()
+        # print('error:' + str(self.elerror))
+        try:
+            self.elerror = float(self.elerror)
+            self.modo_tiempo(self)
+            self.modo_perfiles = 0
+            self.list_ctrl.SetColumnWidth(0, 50)
+            self.list_ctrl.SetColumnWidth(1, 85)
+            self.list_ctrl.SetColumnWidth(2, 0)
+            # self.list_ctrl.InsertColumn(3, 'Error', width=40)
+            self.list_ctrl.InsertColumn(3, 'Error = ' + str(self.elerror), width=72)
+            self.list_ctrl.Show()
+        except:
+            self.textarea.AppendText('Coloque un error relativo\r\n')
+
+
 
     def OnClick(self, event):
         if self.yaClickeo == 1:
@@ -1027,6 +1130,9 @@ class PPLForm(wx.Frame):
 
                 if (len(tabla)) > 0:
                     tabla1 = np.delete(tabla, 0, 1)
+                    if self.modo_perfiles == 0:
+                        tabla1 = np.delete(tabla1, (1, 2), 1)
+
                     if None in tabla1:
                         self.num_en_tabla = 1
                         print('Escriba valores validos en la tabla')
@@ -1058,14 +1164,14 @@ class PPLForm(wx.Frame):
                     self.datagen.next('$W\r')
                     self.contador_tiempo = tim.time()
                     self.bandera = 1
-
-                    self.duracion = np.zeros(tabla.shape[0])
-                    for t in range(int(tabla.shape[0])):
-                        if t == 0:
-                            self.duracion[0] = tabla[0, 2]
-                        else:
-                            self.duracion[t] = tabla[t, 2] + self.duracion[t-1]
-                    print(self.duracion)
+                    if self.modo_perfiles == 1:
+                        self.duracion = np.zeros(tabla.shape[0])
+                        for t in range(int(tabla.shape[0])):
+                            if t == 0:
+                                self.duracion[0] = tabla[0, 2]
+                            else:
+                                self.duracion[t] = tabla[t, 2] + self.duracion[t-1]
+                        print(self.duracion)
             else:
                 print('Conectese al modulo termoelectrico')
                 self.textarea.AppendText('Conectese al modulo termoelectrico\r\n')
@@ -1242,14 +1348,15 @@ class PPLForm(wx.Frame):
             self.pint_graf()
 
         if (self.bandera == 1):
-            # print(tim.time()-self.contador_tiempo)
+            print(tim.time()-self.contador_tiempo)
             self.num_pasos = int(tabla.shape[0])
-            if (len(self.errors) > 51):
-                if ((self.errors[-1]-self.errors[-50]) < 0.035) and (self.errors[-1] < 1.8):
-                # if (tim.time() - self.contador_tiempo > self.duracion[self.ind_pasos]):
+
+            if self.modo_perfiles == 1:
+                # if ((self.errors[-1]-self.errors[-50]) < 0.035) and (self.errors[-1] < 1.8):
+                if (tim.time() - self.contador_tiempo > self.duracion[self.ind_pasos]):
                     self.ind_pasos += 1
-                    print('plot_fase')
-                    print(self.tiempo_rpi)
+                    # print('plot_fase')
+                    # print(self.tiempo_rpi)
                     if self.ind_pasos == self.num_pasos:
                         self.otravar = 1
                     else:
@@ -1258,6 +1365,21 @@ class PPLForm(wx.Frame):
                         self.datagen.next('$R13=5\r')
                         self.datagen.next('$R0=' + str(tabla[self.ind_pasos, 1]) + '\r')
                         self.datagen.next('$W\r')
+            elif self.modo_perfiles == 0:
+                if (len(self.errors) > 51):
+                    if ((self.errors[-1] - self.errors[-50]) < 0.035) and (self.errors[-1] < self.elerror):
+                        # if (tim.time() - self.contador_tiempo > self.duracion[self.ind_pasos]):
+                        self.ind_pasos += 1
+                        # print('plot_fase')
+                        # print(self.tiempo_rpi)
+                        if self.ind_pasos == self.num_pasos:
+                            self.otravar = 1
+                        else:
+                            self.datagen.next('$R16=1\r')
+                            self.datagen.next('$R23=1\r')
+                            self.datagen.next('$R13=5\r')
+                            self.datagen.next('$R0=' + str(tabla[self.ind_pasos, 1]) + '\r')
+                            self.datagen.next('$W\r')
 
         if (self.otravar == 1) and (self.var_fin == 0):
 
