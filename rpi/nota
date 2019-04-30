@@ -1,0 +1,2 @@
+Se realizó una copia de las carpetas y archivos de código y datos generados, que están en la raspberry, luego de hacer la instalacion de las librerias necesarias para ejecutar los codigos de python y reconocer el conversor A/D (ads1256) conectado a la rpi.
+Esta copia se encuetra en el repositorio. https://github.com/techavarria/QCM_rpi
